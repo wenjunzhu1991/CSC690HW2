@@ -8,9 +8,9 @@
 
 import UIKit
 
-var toDoList = ["buy food", "buy water", "run"]
-
 class toDoViewController: UITableViewController{
+    
+    var toDoList2 = toDoListModel()
     
     
     @IBAction func addPress(_ sender: Any) {
@@ -19,19 +19,27 @@ class toDoViewController: UITableViewController{
     
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return toDoList.count
+        //return toDoList.count
+        if let counter = toDoList2.list{
+            return counter.count
+        }else{
+            return 0
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = UITableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "cell")
-        cell.textLabel?.text = toDoList[indexPath.row]
+        if let test = toDoList2.list{
+            cell.textLabel?.text = test[indexPath.row]
+        }
         return cell
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCellEditingStyle.delete{
-            toDoList.remove(at: indexPath.row)
+            toDoList2.list!.remove(at: indexPath.row)
+            toDoList2.saveDate()
             tableView.reloadData()
         }
         
@@ -39,6 +47,7 @@ class toDoViewController: UITableViewController{
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        toDoList2.loadData()
         tableView.reloadData()
     }
     
